@@ -41,17 +41,18 @@ public class Assignment1 {
             line = scanner.nextLine();
             String[] splitted_line = line.split(": ");
             String[] string_line_preferences = splitted_line[1].split(" ");
+            int person_id = Integer.parseInt(splitted_line[0]) -1;
             int[] line_preferences = new int[n];
 
-            if (i % 2 == 0) { //men
+            if (person_id % 2 == 0) { //woman
                 for(int j = 0; j < n; j++) {
-                    men[i/2].preferences.add((Integer.parseInt(string_line_preferences[j]) / 2) -1);
+                    men[person_id/2].preferences.add((Integer.parseInt(string_line_preferences[j]) / 2) -1);
                 }
-            } else { //woman
+            } else { //man
                 for(int j = 0; j < n; j++) {
                     line_preferences[Integer.parseInt(string_line_preferences[j]) / 2] = j;
                 }
-                women[i/2].preferences = line_preferences;
+                women[person_id/2].preferences = line_preferences;
             }
         }
 //        System.out.println("Preferences for men:");
