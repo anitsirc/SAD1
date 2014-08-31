@@ -1,8 +1,15 @@
-//package dk.itu.sad1.assignment1;
+/**
+ * Group F
+ * Lab Exercise 1. Stable Matching
+ * Sofus Albertsen
+ * Janett Holst
+ * Cristina Matonte
+ * Carlos Viñas
+ */
 
 import java.util.*;
 
-public class Assignment1 {
+public class GS {
     public static Woman[] women;
     public static Man[] men;
     public static Queue<Integer> singles = new LinkedList<Integer>();
@@ -10,13 +17,14 @@ public class Assignment1 {
 
     private static void readN(Scanner scanner) throws CustomException {
         String line = scanner.nextLine();
+        // Ignore all comment lines
         while (line.startsWith("#")) {
             line = scanner.nextLine();
         }
+        // Get the value for n
         if (!line.startsWith("n=")) throw new CustomException("Unknown file format");
         String n_pattern = "n=(\\d+)";
         n = Integer.parseInt(line.replaceAll(n_pattern, "$1"));
-//        System.out.println("N = " + String.valueOf(n));
     }
 
     private static void readPersons(Scanner scanner) {
@@ -27,7 +35,7 @@ public class Assignment1 {
             line = scanner.nextLine();
             String[] splitted_line = line.split(" ");
             if (i % 2 == 0) { //men
-                men[i/2] = new Man(n, splitted_line[1]);
+                men[i/2] = new Man(splitted_line[1]);
                 singles.add(i/2);
             } else { //woman
                 women[i/2] = new Woman(n, splitted_line[1]);
@@ -44,27 +52,18 @@ public class Assignment1 {
             int person_id = Integer.parseInt(splitted_line[0]) -1;
             int[] line_preferences = new int[n];
 
-            if (person_id % 2 == 0) { //woman
+            if (person_id % 2 == 0) { //man
                 for(int j = 0; j < n; j++) {
                     men[person_id/2].preferences.add((Integer.parseInt(string_line_preferences[j]) / 2) -1);
                 }
-            } else { //man
+            } else { //woman
                 for(int j = 0; j < n; j++) {
+                    // Store the rankings by man id
                     line_preferences[Integer.parseInt(string_line_preferences[j]) / 2] = j;
                 }
                 women[person_id/2].preferences = line_preferences;
             }
         }
-//        System.out.println("Preferences for men:");
-//        for (Man m : men) {
-//            System.out.println(m.name);
-//            System.out.println(Arrays.toString(m.preferences.toArray()));
-//        }
-//        System.out.println("Preferences for women:");
-//        for (Woman w : women) {
-//            System.out.println(w.name);
-//            System.out.println(Arrays.toString(w.preferences));
-//        }
     }
 
     private static void readInput() throws CustomException {
@@ -97,7 +96,6 @@ public class Assignment1 {
             // Check if woman is free
             if (women[woman].engaged == -1) { //Free
                 women[woman].engaged = current_man; // Take that woman
-                men[current_man].engaged = woman;
                 singles.remove();
             } else { // Engaged
                 int currently_engaged_man = women[woman].engaged;
@@ -106,10 +104,8 @@ public class Assignment1 {
                 if (women[woman].preferences[current_man] < women[woman].preferences[currently_engaged_man]) {
                     // Engage
                     women[woman].engaged = current_man;
-                    men[current_man].engaged = woman;
                     singles.remove();
                     // Set m' as single
-                    men[currently_engaged_man].engaged = -1;
                     singles.add(currently_engaged_man);
                 }
             }
@@ -128,7 +124,7 @@ public class Assignment1 {
     private static class Man extends Person {
         public Queue<Integer> preferences;
 
-        public Man (int n, String name) {
+        public Man (String name) {
             this.name = name;
             this.engaged = -1;
             this.preferences = new LinkedList<Integer>();
