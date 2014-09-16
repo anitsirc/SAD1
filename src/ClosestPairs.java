@@ -9,17 +9,12 @@
 
 import java.awt.geom.Point2D;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.lang.Integer;
 import java.lang.System;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -67,7 +62,6 @@ public class ClosestPairs {
         } finally {
             scanner.close();
         }
-//        System.out.printf("Number of points: %d\n", P.length);
         double minDistance = closestPair(P);
         if (minDistance == (int) minDistance) {
             System.out.printf("%s: %d %d\n", file.getPath(), n, (int) minDistance);
@@ -76,7 +70,6 @@ public class ClosestPairs {
             BigDecimal bg = new BigDecimal(Double.toString(minDistance), new MathContext(15));
 //            bg.setScale(3, BigDecimal.ROUND_HALF_UP);
             System.out.println(file.getPath() + ": " + n + " " + bg);
-//            System.out.printf("%s: %d %d\n", file.getPath(), n, (int) minDistance);
         }
     }
 
@@ -92,7 +85,6 @@ public class ClosestPairs {
     public static double closestPairRec(Point2D.Double[] Px, Point2D.Double[] Py) {
         // findClosestPair
         double min_distance = Double.MAX_VALUE;
-//        System.out.println("Px length: " + Px.length);
         if (Px.length <= 3) {
             double distance = Px[0].distance(Px[1]);
             min_distance = Double.min(min_distance, distance);
@@ -102,11 +94,9 @@ public class ClosestPairs {
                 distance = Px[1].distance(Px[2]);
                 min_distance = Double.min(min_distance, distance);
             }
-//            System.out.println("Min distance: " + min_distance);
             return min_distance;
         }
 
-//        System.out.println("Going through splitting arrays and stuff. Px length: " + Px.length);
         // Construct Qx, Qy, Rx, Ry
         // TODO: make this O(n)
         Point2D.Double[] Qx = java.util.Arrays.copyOfRange(Px, 0, Px.length / 2);
@@ -165,7 +155,6 @@ public class ClosestPairs {
     public static void main(String[] args) throws Exception {
         String folder = args.length > 0 ? args[0] : "../data";
         readInput(folder);
-
     }
 
 
