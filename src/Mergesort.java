@@ -1,16 +1,16 @@
 import java.awt.geom.Point2D;
 
 public class Mergesort {
-  private Point2D.Double[] numbers;
-  private Point2D.Double[] helper;
+  private ClosestPairs.Node[] numbers;
+  private ClosestPairs.Node[] helper;
   private String axis;
 
   private int number;
 
-  public void sort(Point2D.Double[] values, String axis) {
+  public void sort(ClosestPairs.Node[] values, String axis) {
     this.numbers = values;
     number = values.length;
-    this.helper = new Point2D.Double[number];
+    this.helper = new ClosestPairs.Node[number];
     this.axis = axis;
     mergesort(0, number - 1);
   }
@@ -48,7 +48,7 @@ public class Mergesort {
     // Copy the smallest values from either the left or the right side back
     // to the original array
     while (i <= middle && j <= high) {
-      if (comparePoints(helper[i], helper[j])) {
+      if (comparePoints(helper[i].point, helper[j].point)) {
         numbers[k] = helper[i];
         i++;
       } else {
