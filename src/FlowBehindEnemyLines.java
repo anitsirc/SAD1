@@ -1,12 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -33,6 +29,7 @@ public class FlowBehindEnemyLines {
 				System.out.println(Arrays.toString(edge));
 			}
 			edgesFromVertex();
+			dfs();
 		} catch (FileNotFoundException e) {
 			System.out.println("No such file");
 		}
@@ -60,7 +57,6 @@ public class FlowBehindEnemyLines {
 					(cap < 0 ? Integer.MAX_VALUE : cap), 0 };
 		}
 		sc.close();
-
 	}
 
 	public static void fordFulkerson() {
@@ -93,24 +89,30 @@ public class FlowBehindEnemyLines {
 	public static Stack<int[]> dfs(int currentVertex, Stack<int[]> path) {
 		HashSet<int[]> searched = new HashSet<int[]>();
 		ArrayList<int[]> currentEdges = links.get(currentVertex);
-
+//System.out.println(currentEdges.size());
 		for (int[] currentEdge : currentEdges) {
 			path.add(currentEdge);
 			//If we have searched this edge before.
 			if (searched.contains(currentEdge)){
 				path.pop();
-			}
+			} else{
+				//add to searched
+				searched.add(currentEdge);
+//				System.out.println(searched);
 			//if we are at the sink and there is still capacity left
-			else if (currentEdge[1] == 54 && currentEdge[3] < currentEdge[2]) {
-				return path;
-			//else if there is still capacity left, call dfs
-			} else if (currentEdge[3] < currentEdge[2]) {
-				path= dfs(currentEdge[1],path);
-			} else {
-				path.pop();
+				if (currentEdge[1] == 54 && currentEdge[3] < currentEdge[2]) {
+					return path;
+				//else if there is still capacity left, call dfs
+				} else if (currentEdge[3] < currentEdge[2]) {
+	//				path=
+//					System.out.println(searched);
+							return dfs(currentEdge[1],path);
+				} else {
+					path.pop();
+				}
 			}
 		}
-		
+//		System.out.println(path);
 		return path;
 	}
 
