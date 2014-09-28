@@ -17,6 +17,7 @@ public class FlowBehindEnemyLines {
 	public static int[][] edges;
 	public static int[][] directedEdges;
 	public static ArrayList<ArrayList<int[]>> links;
+	static HashSet<int[]> searched ;
 
 	public static void main(String[] args) {
 		try {
@@ -36,6 +37,7 @@ public class FlowBehindEnemyLines {
 	}
 
 	public static void readInput() throws FileNotFoundException {
+		searched = new HashSet<int[]>();
 		Scanner sc = new Scanner(new File("data/rail.txt"));
 		nodeNumber = Integer.parseInt(sc.nextLine());
 		nodes = new String[nodeNumber];
@@ -83,11 +85,14 @@ public class FlowBehindEnemyLines {
 	}
 
 	public static int[][] dfs() {
-		return (int[][]) dfs(0, new Stack<int[]>()).toArray();
+		Stack<int[]>tmp= dfs(0, new Stack<int[]>());	
+		tmp.forEach(v->{
+		System.err.println(Arrays.toString(v));	
+		});
+		return null;
 	}
 
-	public static Stack<int[]> dfs(int currentVertex, Stack<int[]> path) {
-		HashSet<int[]> searched = new HashSet<int[]>();
+	public static Stack<int[]> dfs(int currentVertex, Stack<int[]> path ) {
 		ArrayList<int[]> currentEdges = links.get(currentVertex);
 //System.out.println(currentEdges.size());
 		for (int[] currentEdge : currentEdges) {
@@ -98,6 +103,7 @@ public class FlowBehindEnemyLines {
 			} else{
 				//add to searched
 				searched.add(currentEdge);
+				searched.add(opposite(currentEdge));
 //				System.out.println(searched);
 			//if we are at the sink and there is still capacity left
 				if (currentEdge[1] == 54 && currentEdge[3] < currentEdge[2]) {
@@ -112,8 +118,15 @@ public class FlowBehindEnemyLines {
 				}
 			}
 		}
-//		System.out.println(path);
 		return path;
+	}
+
+	private static int[] opposite(int[] currentEdge) {
+		ArrayList<int[]> tmp =links.get(currentEdge[1]);
+		for (int[] is : tmp) {
+			if (is[1]==currentEdge[0]) return is;
+		}
+		return null;
 	}
 
 }
